@@ -3,20 +3,20 @@
   config,
   ...
 }: {
-  flake.modules.nixos.mint = {
+  flake.modules.nixos.hetm = {
     config,
     lib,
     pkgs,
     ...
   }: let
-    cfg = config.services.mint;
+    cfg = config.services.hetm;
     inherit (lib) mkOption mkEnableOption mkIf types;
   in {
-    options.services.mint = {
-      enable = mkEnableOption "headscale CI preauth key minter";
+    options.services.hetm = {
+      enable = mkEnableOption "Headscale CI preauth key minter";
       package = mkOption {
         type = types.package;
-        default = self.packages.${pkgs.stdenv.hostPlatform.system}.mint;
+        default = self.packages.${pkgs.stdenv.hostPlatform.system}.hetm;
       };
       audience = mkOption {type = types.str;};
       userId = mkOption {
@@ -51,7 +51,7 @@
     };
 
     config = mkIf cfg.enable {
-      systemd.services.mint = {
+      systemd.services.hetm = {
         wantedBy = ["multi-user.target"];
         wants = ["network-online.target"];
         after = ["network-online.target" "headscale.service"];
@@ -90,5 +90,5 @@
     };
   };
 
-  flake.nixosModules.mint = config.flake.modules.nixos.mint;
+  flake.nixosModules.hetm = config.flake.modules.nixos.hetm;
 }
